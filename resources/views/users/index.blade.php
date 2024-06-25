@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Custom Sidebar</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
-           body {
+        body {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
@@ -130,6 +132,7 @@
             font-size: 30px;
             color: #333;
         }
+
         .content h2 {
             color: #333;
         }
@@ -148,14 +151,17 @@
         .text-las {
             color: #ffce00
         }
-        .col{
+
+        .col {
             margin-top: 20px;
         }
-        .table{
+
+        .table {
             text-align: center;
         }
     </style>
 </head>
+
 <body>
     <div class="sidebar">
         <h2>Dashboard</h2>
@@ -203,23 +209,25 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($users as $user)
-                <tr>
-                    <td>{{ $user->name }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td>{{ $user->phone_number }}</td>
-                    <td>{{ $user->gender }}</td>
-                    <td>{{ $user->address }}</td>
-                    <td>{{ $user->type }}</td>
-                    <td>
-                        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm">Edit</a>
-                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display: inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
-                        </form>
-                    </td>
-                </tr>
+                @foreach ($users as $user)
+                    <tr>
+                        <td>{{ $user->name }}</td>
+                        <td>{{ $user->email }}</td>
+                        <td>{{ $user->phone_number }}</td>
+                        <td>{{ $user->gender }}</td>
+                        <td>{{ $user->address }}</td>
+                        <td>{{ $user->type }}</td>
+                        <td>
+                            <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm">Edit</a>
+                            <form action="{{ route('users.destroy', $user->id) }}" method="POST"
+                                style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
                 @endforeach
             </tbody>
         </table>
@@ -245,4 +253,5 @@
         }
     </script>
 </body>
+
 </html>

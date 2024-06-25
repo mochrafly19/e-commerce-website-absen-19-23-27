@@ -240,8 +240,7 @@
                         <td>{{ $product->type }}</td>
                         <td>{{ $product->price }}</td>
                         <td>
-                            <img src="{{ asset($product->gambar) }}" alt="{{ $product->name }}"
-                                style="max-width: 100px;">
+                            <img src="{{ asset($product->thumbnail) }}" alt="{{ $product->name }}" style="max-width: 100px;">
                         </td>
                         <td>{{ $product->link }}</td>
                         <td>

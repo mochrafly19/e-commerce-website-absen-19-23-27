@@ -174,49 +174,52 @@
         @endguest
     </div>
 
-<div class="content">
-    <div class="container">
-        <!-- resources/views/users/edit.blade.php -->
+    <div class="content">
+        <div class="container">
+            <!-- resources/views/users/edit.blade.php -->
 
-<h1>Edit User</h1>
-<form action="{{ route('users.update', $user->id) }}" method="POST">
-    @csrf
-    @method('PUT')
-    <div class="mb-3">
-        <label for="name" class="form-label">Name</label>
-        <input type="text" class="form-control" id="name" name="name" value="{{ $user->name }}">
-    </div>
-    <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}">
-    </div>
-    <div class="mb-3">
-        <label for="phone_number" class="form-label">Phone Number</label>
-        <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ $user->phone_number }}">
-    </div>
-    <div class="mb-3">
-        <label for="gender" class="form-label">Gender</label>
-        <select class="form-select" id="gender" name="gender">
-            <option value="male" {{ $user->gender === 'male' ? 'selected' : '' }}>Male</option>
-            <option value="female" {{ $user->gender === 'female' ? 'selected' : '' }}>Female</option>
-        </select>
-    </div>
-    <div class="mb-3">
-        <label for="address" class="form-label">Address</label>
-        <textarea class="form-control" id="address" name="address">{{ $user->address }}</textarea>
-    </div>
-    <div class="mb-3">
-        <label for="type" class="form-label">Type</label>
-        <select class="form-select" id="type" name="type">
-            <option value="user" {{ $user->type === 'user' ? 'selected' : '' }}>User</option>
-            <option value="admin" {{ $user->type === 'admin' ? 'selected' : '' }}>Admin</option>
-        </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+            <h1>Edit User</h1>
+            <form action="{{ route('users.update', $user->id) }}" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" name="name"
+                        value="{{ $user->name }}">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email"
+                        value="{{ $user->email }}">
+                </div>
+                <div class="mb-3">
+                    <label for="phone_number" class="form-label">Phone Number</label>
+                    <input type="text" class="form-control" id="phone_number" name="phone_number"
+                        value="{{ $user->phone_number }}">
+                </div>
+                <div class="mb-3">
+                    <label for="gender" class="form-label">Gender</label>
+                    <select class="form-select" id="gender" name="gender">
+                        <option value="male" {{ $user->gender === 'male' ? 'selected' : '' }}>Male</option>
+                        <option value="female" {{ $user->gender === 'female' ? 'selected' : '' }}>Female</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <textarea class="form-control" id="address" name="address">{{ $user->address }}</textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="type" class="form-label">Type</label>
+                    <select class="form-select" id="type" name="type">
+                        <option value="user" {{ $user->type === 'user' ? 'selected' : '' }}>User</option>
+                        <option value="admin" {{ $user->type === 'admin' ? 'selected' : '' }}>Admin</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
 
+        </div>
     </div>
-</div>
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 

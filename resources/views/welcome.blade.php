@@ -143,7 +143,7 @@
           
           <div class="col-sm-4 col-lg-3 text-center text-sm-start">
             <div class="main-logo">
-              <a href="/">
+              <a href="/welcome">
                 <img src="assets/images/logo.png" alt="logo" class="img-fluid">
               </a>
             </div>
@@ -384,38 +384,39 @@
                 <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
 
                   <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
-                    @foreach ($products as $product)
-                    <div class="col">
-                        <div class="product-item">
-                          <span class="badge bg-success position-absolute m-3">-30%</span>
-                            <a href="#" class="btn-wishlist"><svg width="24" height="24"><use xlink:href="#heart"></use></svg></a>
-                            <figure>
-                                <a href="{{ route('products.show', $product) }}" style="text-decoration: none; color: inherit;">
-                                    <img src="{{ asset($product->gambar) }}" alt="{{ $product->name }}" class="tab-image">
-                                </a>
-                            </figure>
-                            <h3>{{ $product->name }}</h3>
-                            <span class="price">Rp {{ $product->price }}</span>
-                            <div class="d-flex align-items-center justify-content-between">
-                                <div class="input-group product-qty">
-                                    <span class="input-group-btn">
-                                        <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus">
-                                            <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
-                                        </button>
-                                    </span>
-                                    <input type="text" id="quantity" name="quantity" class="form-control input-number" value="1">
-                                    <span class="input-group-btn">
-                                        <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus">
-                                            <svg width="16" height="16"><use xlink:href="#plus"></use></svg>
-                                        </button>
-                                    </span>
-                                </div>
-                                <a href="#" class="nav-link">Add to Cart <iconify-icon icon="uil:shopping-cart"></iconify-icon></a>
-                            </div>
-                        </div>
+    @foreach ($products as $product)
+        <div class="col">
+            <div class="product-item">
+                <span class="badge bg-success position-absolute m-3">-30%</span>
+                <a href="#" class="btn-wishlist"><svg width="24" height="24"><use xlink:href="#heart"></use></svg></a>
+                <figure>
+                    <a href="{{ route('products.show', $product) }}" style="text-decoration: none; color: inherit;">
+                        <img src="{{ asset($product->gambar) }}" alt="{{ $product->name }}" class="tab-image img-fluid"> <!-- Tambahkan kelas img-fluid di sini -->
+                    </a>
+                </figure>
+                <h3>{{ $product->name }}</h3>
+                <span class="price">Rp {{ $product->price }}</span>
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="input-group product-qty">
+                        <span class="input-group-btn">
+                            <button type="button" class="quantity-left-minus btn btn-danger btn-number" data-type="minus">
+                                <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
+                            </button>
+                        </span>
+                        <input type="text" id="quantity" name="quantity" class="form-control input-number" value="1">
+                        <span class="input-group-btn">
+                            <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus">
+                                <svg width="16" height="16"><use xlink:href="#plus"></use></svg>
+                            </button>
+                        </span>
                     </div>
-                @endforeach
-                  </div>
+                    <a href="#" class="nav-link">Add to Cart <iconify-icon icon="uil:shopping-cart"></iconify-icon></a>
+                </div>
+            </div>
+        </div>
+    @endforeach
+</div>
+
                   <!-- / product-grid -->
                   
                 </div>

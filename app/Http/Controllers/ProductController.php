@@ -2,22 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
+use App\Services\ImageService;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\ProductComment;
 use App\Models\ProductLike;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    private function storeImage($request, $fieldName)
+    protected $imageService;
+
+    public function __construct(ImageService $imageService)
     {
-        if ($request->hasFile($fieldName)) {
-            $image = $request->file($fieldName);
-            $path = $image->store('public/images');
-            return Storage::url($path);
-        }
-        return null;
+        $this->imageService = $imageService;
+        $this->middleware('auth')->only(['comment', 'like']);
     }
 
     public function index(Request $request)
@@ -25,8 +27,8 @@ class ProductController extends Controller
         if ($request->has('search')) {
             return $this->search($request);
         }
-    
-        $products = Product::paginate(10); // Ganti 10 dengan jumlah item per halaman yang diinginkan
+
+        $products = Product::paginate(10); // Change 10 to the desired number of items per page
         return view('products.index', compact('products'));
     }
 
@@ -47,21 +49,10 @@ class ProductController extends Controller
         return view('products.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'description' => 'required|min:250',
-            'type' => 'required|in:t-shirt,hat,jacket,hoodie,pants,shoes',
-            'price' => ['required', 'numeric', function ($attribute, $value, $fail) {
-                if (strpos($value, 'kata_kunci') !== false) {
-                    $fail('Kolom ' . $attribute . ' tidak boleh mengandung kata kunci tertentu.');
-                }
-            }],
-        ]);
-
-        $thumbnail = $this->storeImage($request, 'thumbnail');
-        $gambar = $this->storeImage($request, 'gambar');
+        $thumbnail = $request->hasFile('thumbnail') ? $this->imageService->store($request->file('thumbnail')) : null;
+        $gambar = $request->hasFile('gambar') ? $this->imageService->store($request->file('gambar')) : null;
 
         Product::create([
             'name' => $request->name,
@@ -73,64 +64,54 @@ class ProductController extends Controller
             'price' => $request->price,
         ]);
 
-        return redirect()->route('products.index')->with('success','Produk berhasil ditambahkan.');
+        return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan.');
     }
 
     public function show(Product $product)
     {
-        return view('products.show',compact('product'));
+        return view('products.show', compact('product'));
     }
 
     public function edit(Product $product)
     {
-        return view('products.edit',compact('product'));
+        return view('products.edit', compact('product'));
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateProductRequest $request, $id)
     {
-        $request->validate([
-            'name' => 'required',
-            'description' => 'required|min:250',
-            'type' => 'required|in:t-shirt,hat,jacket,hoodie,pants,shoes',
-            'price' => 'required', // Menghapus aturan validasi 'numeric'
-        ]);
-    
         $product = Product::find($id);
-    
+
         $product->name = $request->input('name');
         $product->description = $request->input('description');
         $product->type = $request->input('type');
-    
-        // Memeriksa apakah input price adalah numerik
+
         if (is_numeric($request->input('price'))) {
             $product->price = $request->input('price');
         } else {
-            // Jika input price bukan numerik, kembalikan dengan pesan kesalahan
             return redirect()->back()->withErrors(['price' => 'Price harus berupa angka.'])->withInput();
         }
-    
+
         $product->link = $request->input('link');
-    
+
         if ($request->hasFile('thumbnail')) {
             Storage::delete($product->thumbnail);
-            $product->thumbnail = $request->file('thumbnail')->store('public/thumbnails');
+            $product->thumbnail = $this->imageService->store($request->file('thumbnail'));
         }
-    
+
         if ($request->hasFile('gambar')) {
             Storage::delete($product->gambar);
-            $product->gambar = $request->file('gambar')->store('public/gambar');
+            $product->gambar = $this->imageService->store($request->file('gambar'));
         }
-    
+
         $product->save();
-    
+
         return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui.');
     }
 
     public function destroy(Product $product)
     {
         $product->delete();
-
-        return redirect()->route('products.index')->with('success','Produk berhasil dihapus.');
+        return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus.');
     }
 
     public function search(Request $request)
@@ -140,44 +121,39 @@ class ProductController extends Controller
                             ->orWhere('description', 'like', "%$search%")
                             ->orWhere('type', 'like', "%$search%")
                             ->orWhere('price', 'like', "%$search%")
-                            ->paginate(10); // Ganti 10 dengan jumlah item per halaman yang diinginkan
+                            ->paginate(10);
         return view('products.index', compact('products'));
     }
-    
+
     public function comment(Request $request, Product $product)
     {
-        if (!auth()->check()) {
+        if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu untuk membuat komentar.');
         }
-         // Validasi input
-         $request->validate([
+
+        $request->validate([
             'content' => 'required|min:5',
         ]);
 
-        // Buat instance komentar
         $comment = new ProductComment();
         $comment->content = $request->content;
+        $comment->user_id = Auth::id();
 
-        // Tentukan user yang memberikan komentar
-        $comment->user_id = auth()->id(); // Jika menggunakan otentikasi pengguna
-
-        // Simpan komentar ke dalam produk yang dimaksud
         $product->comments()->save($comment);
 
-        // Redirect kembali ke halaman produk dengan pesan sukses
         return redirect()->route('products.show', $product)->with('success', 'Komentar berhasil ditambahkan.');
     }
-    
+
     public function like(Product $product)
     {
-        if (!auth()->check()) {
+        if (!Auth::check()) {
             return redirect()->back()->with('error', 'Anda harus masuk untuk menyukai produk.');
         }
-    
-        $like = new ProductLike(); // Menggunakan model ProductLike
-        $like->user_id = auth()->id(); // Jika Anda menggunakan otentikasi pengguna
+
+        $like = new ProductLike();
+        $like->user_id = Auth::id();
         $product->likes()->save($like);
-    
+
         return redirect()->back()->with('success', 'Produk disukai.');
     }
 }

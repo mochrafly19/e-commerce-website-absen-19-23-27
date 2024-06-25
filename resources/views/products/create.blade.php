@@ -199,62 +199,79 @@
             </div>
         @endguest
     </div>
-    <div class="content">
-        @if (session('success'))
-            <div class="alert alert-success" role="alert">
-                {{ session('success') }}
-            </div>
-        @endif
-        <div class="container">
-            @if (session('success'))
-                <div class="alert alert-success" role="alert">
-                    {{ session('success') }}
-                </div>
-            @endif
+    <div class="container">
+    <h1>Create a New Product</h1>
 
-            <h1>Tambah Produk</h1>
+    <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
 
-            <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="form-group">
-                    <label for="name">Nama Produk:</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="description">Deskripsi:</label>
-                    <textarea id="description" name="description" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="type">Tipe:</label>
-                    <select id="type" name="type" required>
-                        <option value="t-shirt">T-Shirt</option>
-                        <option value="hat">Hat</option>
-                        <option value="jacket">Jacket</option>
-                        <option value="hoodie">Hoodie</option>
-                        <option value="pants">Pants</option>
-                        <option value="shoes">Shoes</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="price">Harga:</label>
-                    <input type="text" id="price" name="price" required>
-                </div>
-                <div class="form-group">
-                    <label for="thumbnail">Thumbnail:</label>
-                    <input type="file" id="thumbnail" name="thumbnail" required>
-                </div>
-                <div class="form-group">
-                    <label for="gambar">Gambar:</label>
-                    <input type="file" id="gambar" name="gambar" required>
-                </div>
-                <div class="form-group">
-                    <label for="link">Link:</label>
-                    <input type="text" id="link" name="link">
-                </div>
-                <button type="submit">Simpan</button>
-            </form>
+        <div class="form-group">
+            <label for="name">Product Name</label>
+            <input type="text" name="name" class="form-control" id="name" value="{{ old('name') }}">
+            @error('name')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
         </div>
-    </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea name="description" class="form-control" id="description" rows="5">{{ old('description') }}</textarea>
+            @error('description')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="type">Type</label>
+            <select name="type" class="form-control" id="type">
+                <option value="">Select Type</option>
+                <option value="t-shirt" {{ old('type') == 't-shirt' ? 'selected' : '' }}>T-Shirt</option>
+                <option value="hat" {{ old('type') == 'hat' ? 'selected' : '' }}>Hat</option>
+                <option value="jacket" {{ old('type') == 'jacket' ? 'selected' : '' }}>Jacket</option>
+                <option value="hoodie" {{ old('type') == 'hoodie' ? 'selected' : '' }}>Hoodie</option>
+                <option value="pants" {{ old('type') == 'pants' ? 'selected' : '' }}>Pants</option>
+                <option value="shoes" {{ old('type') == 'shoes' ? 'selected' : '' }}>Shoes</option>
+            </select>
+            @error('type')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="price">Price</label>
+            <input type="text" name="price" class="form-control" id="price" value="{{ old('price') }}">
+            @error('price')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="link">Product Link</label>
+            <input type="text" name="link" class="form-control" id="link" value="{{ old('link') }}">
+            @error('link')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="thumbnail">Thumbnail Image</label>
+            <input type="file" name="thumbnail" class="form-control-file" id="thumbnail">
+            @error('thumbnail')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="gambar">Product Image</label>
+            <input type="file" name="gambar" class="form-control-file" id="gambar">
+            @error('gambar')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create Product</button>
+    </form>
+</div>
 
 </body>
 
