@@ -1,0 +1,238 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Crypto Wallet',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: WalletPage(),
+    );
+  }
+}
+
+class WalletPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        title: Text(
+          'My Wallet',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CircleAvatar(
+              backgroundImage: AssetImage('assets/avatar.png'), // Placeholder image
+            ),
+          ),
+        ],
+        iconTheme: IconThemeData(color: Colors.black),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Wallet Balance Section
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              padding: EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Balance',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    '\$1357.00',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    '/usd',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      WalletButton(
+                        icon: Icons.add,
+                        label: 'Deposit',
+                      ),
+                      WalletButton(
+                        icon: Icons.arrow_downward,
+                        label: 'Withdraw',
+                      ),
+                      WalletButton(
+                        icon: Icons.more_horiz,
+                        label: 'More',
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
+            // For You Section
+            Text(
+              'For You',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ActionCard(
+                  icon: Icons.book,
+                  label: 'Learn crypto',
+                ),
+                ActionCard(
+                  icon: Icons.calculate,
+                  label: 'DCA Simulation',
+                ),
+                ActionCard(
+                  icon: Icons.people,
+                  label: 'Join Commun',
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            // Popular Cryptos Section
+            Text(
+              'Popular Cryptos',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            CryptoTile(
+              cryptoName: 'Bitcoin',
+              cryptoSymbol: 'BTC',
+              price: '\$20,174.45',
+              change: '-3.15',
+            ),
+            CryptoTile(
+              cryptoName: 'Ethereum',
+              cryptoSymbol: 'ETH',
+              price: '\$1,071.81',
+              change: '+1.35',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class WalletButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+
+  WalletButton({required this.icon, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 25,
+          backgroundColor: Colors.white,
+          child: Icon(icon, color: Colors.blue),
+        ),
+        SizedBox(height: 5),
+        Text(label, style: TextStyle(color: Colors.white)),
+      ],
+    );
+  }
+}
+
+class ActionCard extends StatelessWidget {
+  final IconData icon;
+  final String label;
+
+  ActionCard({required this.icon, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        padding: EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          color: Colors.blue[100],
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Column(
+          children: [
+            Icon(icon, size: 40, color: Colors.blue),
+            SizedBox(height: 10),
+            Text(label, textAlign: TextAlign.center),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CryptoTile extends StatelessWidget {
+  final String cryptoName;
+  final String cryptoSymbol;
+  final String price;
+  final String change;
+
+  CryptoTile({
+    required this.cryptoName,
+    required this.cryptoSymbol,
+    required this.price,
+    required this.change,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.currency_bitcoin, color: Colors.orange),
+              SizedBox(width: 10),
+              Text('$cryptoName ($cryptoSymbol)', style: TextStyle(fontSize: 16)),
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(price, style: TextStyle(fontSize: 16)),
+              Text(
+                change,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: change.startsWith('-') ? Colors.red : Colors.green,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
