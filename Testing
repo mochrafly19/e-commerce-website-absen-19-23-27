@@ -1,0 +1,194 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(CryptoWalletApp());
+}
+
+class CryptoWalletApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: WalletHomeScreen(),
+    );
+  }
+}
+
+class WalletHomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('My Wallet'),
+        backgroundColor: Colors.blueAccent,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            BalanceSection(),
+            SizedBox(height: 20),
+            ForYouSection(),
+            SizedBox(height: 20),
+            PopularCryptos(),
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_balance_wallet),
+            label: 'Wallet',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: 'Favorites',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.link),
+            label: 'More',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BalanceSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.blueAccent,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'My Wallet',
+            style: TextStyle(color: Colors.white, fontSize: 18),
+          ),
+          SizedBox(height: 10),
+          Text(
+            '\$1357.00',
+            style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            '/usd',
+            style: TextStyle(color: Colors.white70, fontSize: 14),
+          ),
+          SizedBox(height: 15),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              ActionButton(icon: Icons.add, label: 'Deposit'),
+              ActionButton(icon: Icons.remove, label: 'Withdraw'),
+              ActionButton(icon: Icons.more_horiz, label: 'More'),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ActionButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+
+  ActionButton({required this.icon, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Icon(icon, color: Colors.white),
+        Text(
+          label,
+          style: TextStyle(color: Colors.white),
+        ),
+      ],
+    );
+  }
+}
+
+class ForYouSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        ForYouCard(title: 'Learn crypto'),
+        ForYouCard(title: 'DCA Simulation'),
+        ForYouCard(title: 'Join Summit'),
+      ],
+    );
+  }
+}
+
+class ForYouCard extends StatelessWidget {
+  final String title;
+
+  ForYouCard({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.blue[50],
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Column(
+        children: [
+          Icon(Icons.book),
+          SizedBox(height: 10),
+          Text(title),
+        ],
+      ),
+    );
+  }
+}
+
+class PopularCryptos extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ListView(
+        children: [
+          CryptoTile(name: 'Bitcoin', price: '20174.45', change: '-3.15'),
+          CryptoTile(name: 'Ethereum', price: '1071.81', change: '-2.20'),
+        ],
+      ),
+    );
+  }
+}
+
+class CryptoTile extends StatelessWidget {
+  final String name;
+  final String price;
+  final String change;
+
+  CryptoTile({required this.name, required this.price, required this.change});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Icon(Icons.monetization_on),
+      title: Text(name),
+      trailing: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('\$$price', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(change, style: TextStyle(color: change.startsWith('-') ? Colors.red : Colors.green)),
+        ],
+      ),
+    );
+  }
+}
